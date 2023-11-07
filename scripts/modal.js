@@ -12,7 +12,7 @@ profileAddBtn.addEventListener('click', () => {
   openPopup(popTypeNewCard);
 });
 
-function openPopup(popUpSelector) {
+export function openPopup(popUpSelector) {
   popUpSelector.classList.add('popup_is-opened');
   addEventListener();
 }
@@ -41,6 +41,7 @@ function removeEventListener() {
   document.removeEventListener('click', closeByOverlayClick);
 }
 
+//==================Реализация закрытия попапов крестом===========//
 allPopups.forEach(popup => {
   const popupCloseBtn = popup.querySelector('.popup__close');
   if (popupCloseBtn) {
@@ -48,4 +49,18 @@ allPopups.forEach(popup => {
       closePopup(popup);
     });
   }
+});
+//=================Реализация попапа с картинкой==============//
+
+const cardImgs = document.querySelectorAll('.card__image');
+const popupTypeImage = document.querySelector('.popup_type_image');
+cardImgs.forEach(cardImg => {
+  cardImg.addEventListener('click', () => {
+    openPopup(popupTypeImage);
+    const bigImg = popupTypeImage.querySelector('.popup__image');
+    const popupCaption = popupTypeImage.querySelector('.popup__caption');
+    bigImg.src = cardImg.src;
+    bigImg.alt = cardImg.alt;
+    popupCaption.textContent = bigImg.alt;
+  });
 });

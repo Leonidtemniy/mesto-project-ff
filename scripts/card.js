@@ -1,4 +1,5 @@
 //в файле card.js описаны функции для работы с карточками: функция создания карточки, функции-обработчики событий удаления и лайка карточки;
+
 const templateEl = document.querySelector('#card-template').content;
 
 function deleteCard(evt) {
@@ -8,7 +9,6 @@ function deleteCard(evt) {
 
 function likeCard(evt) {
   evt.target.classList.toggle('card__like-button_is-active');
-  console.log(evt.target);
 }
 
 function createCard(template) {
@@ -24,6 +24,7 @@ function createCard(template) {
 
   const LikeBtn = newCardEl.querySelector('.card__like-button');
   LikeBtn.addEventListener('click', likeCard);
+
   return newCardEl;
 }
 export { createCard, deleteCard };
