@@ -59,20 +59,22 @@ allPopups.forEach(popup => {
   }
 });
 //=================Реализация попапа с картинкой==============//
+function popUpWithImg() {
+  const cardImgs = document.querySelectorAll('.card__image');
+  const popupTypeImage = document.querySelector('.popup_type_image');
 
-const cardImgs = document.querySelectorAll('.card__image');
-const popupTypeImage = document.querySelector('.popup_type_image');
-
-cardImgs.forEach(cardImg => {
-  cardImg.addEventListener('click', () => {
-    openPopup(popupTypeImage);
-    const bigImg = popupTypeImage.querySelector('.popup__image');
-    const popupCaption = popupTypeImage.querySelector('.popup__caption');
-    bigImg.src = cardImg.src;
-    bigImg.alt = cardImg.alt;
-    popupCaption.textContent = bigImg.alt.replace('Фотография', '');
+  cardImgs.forEach(cardImg => {
+    cardImg.addEventListener('click', () => {
+      openPopup(popupTypeImage);
+      const bigImg = popupTypeImage.querySelector('.popup__image');
+      const popupCaption = popupTypeImage.querySelector('.popup__caption');
+      bigImg.src = cardImg.src;
+      bigImg.alt = cardImg.alt;
+      popupCaption.textContent = bigImg.alt.replace('Фотография', '');
+    });
   });
-});
+}
+popUpWithImg();
 //=================Реализация логики работы форм============///
 const editProfileForm = document.forms['edit-profile'];
 const newPlaceForm = document.forms['new-place'];
@@ -91,9 +93,12 @@ editProfileForm.addEventListener('submit', evt => {
 
 newPlaceForm.addEventListener('submit', evt => {
   evt.preventDefault();
-
-  const newUserCard = createCard(newPlaceForm);
+  const dataFromAddForm = {};
+  dataFromAddForm.name = newPlaceForm['place-name'].value;
+  dataFromAddForm.link = newPlaceForm['link'].value;
+  const newUserCard = createCard(dataFromAddForm);
   cardsContainer.prepend(newUserCard);
   newPlaceForm.reset();
   closePopup(popTypeNewCard);
+  popUpWithImg();
 });
