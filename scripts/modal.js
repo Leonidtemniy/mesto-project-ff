@@ -1,4 +1,8 @@
 //в файле modal.js описаны функции для работы с модальными окнами: функция открытия модального окна, функция закрытия модального окна, функция-обработчик события нажатия Esc и функция-обработчик события клика по оверлею
+
+import { createCard } from './card.js';
+import { cardsContainer } from './index.js';
+
 //==============Глобальные перенменные для реализации попапов==========//
 const profileEditBtn = document.querySelector('.profile__edit-button');
 const profileAddBtn = document.querySelector('.profile__add-button');
@@ -15,17 +19,13 @@ profileAddBtn.addEventListener('click', () => {
 });
 
 export function openPopup(popUpSelector) {
-  popUpSelector.classList.add('popup_is-animated');
-  setTimeout(() => {
-    popUpSelector.classList.add('popup_is-opened');
-  }, 1);
+  popUpSelector.classList.add('popup_is-animated', 'popup_is-opened');
+
   addEventListener();
 }
 function closePopup(popUpSelector) {
-  popUpSelector.classList.remove('popup_is-opened');
-  setTimeout(() => {
-    popUpSelector.classList.remove('popup_is-opened');
-  }, 1);
+  popUpSelector.classList.remove('popup_is-opened', 'popup_is-animated');
+
   removeEventListener();
 }
 
@@ -74,4 +74,26 @@ cardImgs.forEach(cardImg => {
   });
 });
 //=================Реализация логики работы форм============///
-//const editForm = document.forms.
+const editProfileForm = document.forms['edit-profile'];
+const newPlaceForm = document.forms['new-place'];
+const profileTitle = document.querySelector('.profile__title');
+const profileDescription = document.querySelector('.profile__description');
+
+editProfileForm.name.value = profileTitle.textContent;
+editProfileForm.description.value = profileDescription.textContent;
+
+editProfileForm.addEventListener('submit', evt => {
+  evt.preventDefault();
+  profileTitle.textContent = editProfileForm.name.value;
+  profileDescription.textContent = editProfileForm.description.value;
+  closePopup(popupTypeEdit);
+});
+
+newPlaceForm.addEventListener('submit', evt => {
+  evt.preventDefault();
+
+  const newUserCard = createCard(newPlaceForm);
+  cardsContainer.prepend(newUserCard);
+  newPlaceForm.reset();
+  closePopup(popTypeNewCard);
+});

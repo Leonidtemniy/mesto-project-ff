@@ -2,7 +2,7 @@
 import { initialCards } from './cards.js';
 import { createCard } from './card.js';
 
-const cardsContainer = document.querySelector('.places__list');
+export const cardsContainer = document.querySelector('.places__list');
 
 //====================Отрисовка карточек на стронице=============//
 initialCards.forEach(cards => {
