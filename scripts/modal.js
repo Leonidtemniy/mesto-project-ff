@@ -1,7 +1,7 @@
 //в файле modal.js описаны функции для работы с модальными окнами: функция открытия модального окна, функция закрытия модального окна, функция-обработчик события нажатия Esc и функция-обработчик события клика по оверлею
 
-import { createCard } from './card.js';
-import { cardsContainer } from './index.js';
+import { createCard } from '../scripts/card';
+import { cardsContainer } from '../src/index.js';
 
 //==============Глобальные перенменные для реализации попапов==========//
 const profileEditBtn = document.querySelector('.profile__edit-button');
@@ -59,7 +59,7 @@ allPopups.forEach(popup => {
   }
 });
 //=================Реализация попапа с картинкой==============//
-function popUpWithImg() {
+export function popUpWithImg() {
   const cardImgs = document.querySelectorAll('.card__image');
   const popupTypeImage = document.querySelector('.popup_type_image');
 
@@ -74,7 +74,7 @@ function popUpWithImg() {
     });
   });
 }
-popUpWithImg();
+
 //=================Реализация логики работы форм============///
 const editProfileForm = document.forms['edit-profile'];
 const newPlaceForm = document.forms['new-place'];
