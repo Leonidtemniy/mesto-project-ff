@@ -1,11 +1,11 @@
-import '../pages/index.css';
-import '../scripts/modal.js';
-import '../scripts/card.js';
-import '../scripts/cards.js';
+import './pages/index.css';
+import './scripts/modal.js';
+import './scripts/card.js';
+import './scripts/cards.js';
 
-import { initialCards } from '../scripts/cards.js';
-import { createCard } from '../scripts/card.js';
-import { openPopup, closePopup } from '../scripts/modal.js';
+import { initialCards } from './scripts/cards.js';
+import { createCard, deleteCard, likeCard } from './scripts/card.js';
+import { openPopup, closePopup, handleImageClick } from './scripts/modal.js';
 
 const cardsContainer = document.querySelector('.places__list');
 const profileEditBtn = document.querySelector('.profile__edit-button');
@@ -20,11 +20,10 @@ const popupTypeNewCard = document.querySelector('.popup_type_new-card');
 
 //====================Отрисовка карточек на стронице=============//
 initialCards.forEach(cards => {
-  const newCard = createCard(cards);
-  //openPopupWithImg();
+  const newCard = createCard(cards, { deleteCard, likeCard, handleImageClick });
   cardsContainer.append(newCard);
 });
-//==================Обработчики из modal.js=================//
+//==================Обработчики кнопок  из modal.js=================//
 profileEditBtn.addEventListener('click', () => {
   editProfileForm.name.value = profileTitle.textContent;
   editProfileForm.description.value = profileDescription.textContent;
@@ -44,7 +43,7 @@ allPopups.forEach(popup => {
   }
 });
 
-//=================Реализация логики работы форм============///
+//=================Реализация логики работы сабмита форм============///
 
 editProfileForm.addEventListener('submit', evt => {
   evt.preventDefault();
@@ -58,7 +57,7 @@ newPlaceForm.addEventListener('submit', evt => {
   const dataFromAddForm = {};
   dataFromAddForm.name = newPlaceForm['place-name'].value;
   dataFromAddForm.link = newPlaceForm['link'].value;
-  const newUserCard = createCard(dataFromAddForm);
+  const newUserCard = createCard(dataFromAddForm, { deleteCard, likeCard, handleImageClick });
   cardsContainer.prepend(newUserCard);
   newPlaceForm.reset();
   closePopup(popupTypeNewCard);

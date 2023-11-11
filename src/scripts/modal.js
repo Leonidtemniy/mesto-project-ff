@@ -1,4 +1,7 @@
 //=================Функции реализации открытия/закрытия попапов=========//
+const popupTypeImage = document.querySelector('.popup_type_image');
+const bigImg = popupTypeImage.querySelector('.popup__image');
+const popupCaption = popupTypeImage.querySelector('.popup__caption');
 
 export function openPopup(popUpSelector) {
   popUpSelector.classList.add('popup_is-animated', 'popup_is-opened');
@@ -27,4 +30,12 @@ function setCloseEventListener() {
 function removeCloseEventListener() {
   document.removeEventListener('keydown', closeByEsc);
   document.removeEventListener('click', closeByOverlayClick);
+}
+
+//
+export function handleImageClick(newCardImage) {
+  openPopup(popupTypeImage);
+  bigImg.src = newCardImage.src;
+  bigImg.alt = newCardImage.alt;
+  popupCaption.textContent = bigImg.alt.replace('Фотография', '');
 }
