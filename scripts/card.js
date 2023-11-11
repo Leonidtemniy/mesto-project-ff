@@ -1,29 +1,43 @@
-//в файле card.js описаны функции для работы с карточками: функция создания карточки, функции-обработчики событий удаления и лайка карточки;
-
+import { openPopup } from './modal.js';
 const templateEl = document.querySelector('#card-template').content;
 
 function deleteCard(evt) {
-  const cardToDelet = evt.target.closest('.card');
-  cardToDelet.remove();
+  const cardToDelete = evt.target.closest('.card');
+  cardToDelete.remove();
 }
 
 function likeCard(evt) {
   evt.target.classList.toggle('card__like-button_is-active');
 }
 
-function createCard(template) {
+function createCard(data) {
   const newCardEl = templateEl.querySelector('.card').cloneNode(true);
   const newCardTitle = newCardEl.querySelector('.card__title');
   const newCardImage = newCardEl.querySelector('.card__image');
-  newCardTitle.textContent = template.name;
-  newCardImage.src = template.link;
-  newCardImage.alt = 'Фотография ' + template.name;
+  newCardTitle.textContent = data.name;
+  newCardImage.src = data.link;
+  newCardImage.alt = 'Фотография ' + data.name;
+  //=======Реализация кнопки удаления=====//
 
   const deleteBtn = newCardEl.querySelector('.card__delete-button');
   deleteBtn.addEventListener('click', deleteCard);
 
+  //=======Реализация кнопки лайк======//
+
   const LikeBtn = newCardEl.querySelector('.card__like-button');
   LikeBtn.addEventListener('click', likeCard);
+
+  //=======Реализация  попапа с большой картинкой=====//
+
+  const popupTypeImage = document.querySelector('.popup_type_image');
+  newCardImage.addEventListener('click', () => {
+    openPopup(popupTypeImage);
+    const bigImg = popupTypeImage.querySelector('.popup__image');
+    const popupCaption = popupTypeImage.querySelector('.popup__caption');
+    bigImg.src = newCardImage.src;
+    bigImg.alt = newCardImage.alt;
+    popupCaption.textContent = bigImg.alt.replace('Фотография', '');
+  });
 
   return newCardEl;
 }
