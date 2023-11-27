@@ -2,6 +2,7 @@ import './pages/index.css';
 import './scripts/modal.js';
 import './scripts/card.js';
 import './scripts/cards.js';
+import './scripts/validation.js';
 
 import { initialCards } from './scripts/cards.js';
 import { createCard, deleteCard, likeCard } from './scripts/card.js';
@@ -43,7 +44,7 @@ allPopups.forEach(popup => {
   }
 });
 
-//=================Реализация логики работы сабмита форм============///
+//===============Реализация логики работы сабмита форм==========///
 
 editProfileForm.addEventListener('submit', evt => {
   evt.preventDefault();
