@@ -50,6 +50,8 @@
               placeholder="Имя"
               minlength="2"
               maxlength="40"
+              pattern="^[a-zA-Zа-яА-ЯёЁ\-\s]+$"
+              data-error-message="Можно использовать только латинские и кирилические буквы"
               required
             />
             <span id="name--error" class="popup__error"></span>
@@ -60,6 +62,8 @@
               placeholder="Занятие"
               minlength="2"
               maxlength="200"
+              pattern="^[a-zA-Zа-яА-ЯёЁ\-\s]+$"
+              data-error-message="Можно использовать только латинские и кирилические буквы"
               required
             />
             <span id="description--error" class="popup__error"></span>
@@ -79,6 +83,8 @@
               placeholder="Название"
               minlength="2"
               maxlength="30"
+              pattern="^[a-zA-Zа-яА-ЯёЁ\-\s]+$"
+              data-error-message="Можно использовать только латинские и кирилические буквы"
               required
             />
             <span id="place-name--error" class="popup__error"></span>

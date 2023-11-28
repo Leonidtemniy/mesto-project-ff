@@ -1,14 +1,5 @@
 //==========Валидация===========//
-validationSettings = {
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_disabled',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__error_visible'
-};
 
-//=========Слушатели========//
 function disableButton(buttonElement, config) {
   buttonElement.disabled = true;
   buttonElement.classList.add(config.inactiveButtonClass);
@@ -45,6 +36,11 @@ function hideError(input, errorElement, config) {
 function checkInputValidity(input, formElement, config) {
   const spanIdSelector = `#${input.name}--error`;
   const errorElement = formElement.querySelector(spanIdSelector);
+
+  input.validity.patternMismatch
+    ? input.setCustomValidity(input.dataset.errorMessage)
+    : input.setCustomValidity('');
+
   input.validity.valid
     ? hideError(input, errorElement, config)
     : showError(input, errorElement, config);
@@ -75,6 +71,4 @@ function resetValidation(config) {
     disableButton(buttonElement, config);
   });
 }
-
-enableValidation(validationSettings);
-resetValidation(validationSettings);
+export { enableValidation, resetValidation };
