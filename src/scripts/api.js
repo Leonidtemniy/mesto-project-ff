@@ -84,3 +84,35 @@ export function editProfileAvatar(userAvatar) {
     }
   });
 }
+//=========добавление и удаление лайка PUT и DELETE========//
+export function likeCard(cardId) {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: 'PUT',
+    headers: config.headers,
+    body: JSON.stringify({
+      _id: cardId
+    })
+  }).then(res => {
+    if (res.ok) {
+      return res.json();
+    } else {
+      return Promise.reject(`Ошибка сервера: ${res.status}`);
+    }
+  });
+}
+
+export function unLikeCard(cardId) {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: 'DELETE',
+    headers: config.headers,
+    body: JSON.stringify({
+      _id: cardId
+    })
+  }).then(res => {
+    if (res.ok) {
+      return res.json();
+    } else {
+      return Promise.reject(`Ошибка сервера: ${res.status}`);
+    }
+  });
+}

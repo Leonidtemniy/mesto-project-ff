@@ -5,7 +5,7 @@ import './scripts/card.js';
 import './scripts/validation.js';
 import './scripts/api.js';
 
-import { createCard, deleteCard, likeCard } from './scripts/card.js';
+import { createCard, deleteCard } from './scripts/card.js';
 import { openPopup, closePopup, handleImageClick } from './scripts/modal.js';
 import { enableValidation, resetValidation } from './scripts/validation.js';
 import {
@@ -13,7 +13,9 @@ import {
   getUserInfo,
   editProfileInfo,
   editProfileAvatar,
-  sendMyCard
+  sendMyCard,
+  likeCard,
+  unLikeCard
 } from './scripts/api.js';
 
 const validationSettings = {
@@ -44,8 +46,9 @@ const profileImage = document.querySelector('.profile__image');
 getInitialCards()
   .then(data => {
     data.forEach(card => {
-      const newCard = createCard(card, { deleteCard, likeCard, handleImageClick });
+      const newCard = createCard(card, { deleteCard, likeCard, unLikeCard, handleImageClick });
       cardsContainer.append(newCard);
+      console.log(card);
     });
   })
   .catch(err => {
