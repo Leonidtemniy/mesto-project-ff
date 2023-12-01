@@ -39,3 +39,12 @@ export function handleImageClick(newCardImage) {
   bigImg.alt = newCardImage.alt;
   popupCaption.textContent = bigImg.alt.replace('Фотография', '');
 }
+//=========Изменение надписи на кнопки сабмита======//
+export function duringLoadingText(form) {
+  const submitBtn = form.querySelector('.popup__button');
+  submitBtn.textContent = 'Сохранение...';
+}
+export function afterLoadingText(form) {
+  const submitBtn = form.querySelector('.popup__button');
+  submitBtn.textContent = 'Сохранить';
+}

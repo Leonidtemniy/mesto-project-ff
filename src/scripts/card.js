@@ -1,14 +1,5 @@
 const templateEl = document.querySelector('#card-template').content;
 
-// function deleteCard(evt) {
-//   const cardToDelete = evt.target.closest('.card');
-//   cardToDelete.remove();
-// }
-
-// function likeCard(evt) {
-// evt.target.classList.toggle('card__like-button_is-active');
-// }
-
 function createCard(data, { deleteCard, likeCard, unLikeCard, handleImageClick, myId }) {
   const newCardEl = templateEl.querySelector('.card').cloneNode(true);
   const newCardTitle = newCardEl.querySelector('.card__title');

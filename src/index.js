@@ -6,7 +6,13 @@ import './scripts/validation.js';
 import './scripts/api.js';
 
 import { createCard } from './scripts/card.js';
-import { openPopup, closePopup, handleImageClick } from './scripts/modal.js';
+import {
+  openPopup,
+  closePopup,
+  handleImageClick,
+  duringLoadingText,
+  afterLoadingText
+} from './scripts/modal.js';
 import { enableValidation, resetValidation } from './scripts/validation.js';
 import {
   myId,
@@ -96,32 +102,33 @@ allPopups.forEach(popup => {
 //===============Реализация логики работы сабмита форм==========///
 editProfileAvatarForm.addEventListener('submit', evt => {
   evt.preventDefault();
-  editProfileAvatar(editProfileAvatarForm.link.value).then(data => {
-    profileImage.style.backgroundImage = `url(${data.avatar})`;
-    closePopup(popupTypeNewAvatar);
-  });
+  duringLoadingText(editProfileAvatarForm);
+  editProfileAvatar(editProfileAvatarForm.link.value)
+    .then(data => {
+      profileImage.style.backgroundImage = `url(${data.avatar})`;
+      closePopup(popupTypeNewAvatar);
+      resetValidation(validationSettings);
+      afterLoadingText(editProfileAvatarForm);
+    })
+    .catch(err => {
+      console.log(`Ошибка сервера: ${err}`);
+    });
 });
 
 editProfileForm.addEventListener('submit', evt => {
   evt.preventDefault();
-  editProfileInfo(editProfileForm.name.value, editProfileForm.description.value).then(data => {
-    profileTitle.textContent = data.name;
-    profileDescription.textContent = data.about;
-    closePopup(popupTypeEdit);
-  });
+  duringLoadingText(editProfileForm);
+  editProfileInfo(editProfileForm.name.value, editProfileForm.description.value)
+    .then(data => {
+      profileTitle.textContent = data.name;
+      profileDescription.textContent = data.about;
+      closePopup(popupTypeEdit);
+      afterLoadingText(editProfileForm);
+    })
+    .catch(err => {
+      console.log(`Ошибка сервера: ${err}`);
+    });
 });
-
-// newPlaceForm.addEventListener('submit', evt => {
-//   evt.preventDefault();
-//   const dataFromAddForm = {};
-//   dataFromAddForm.name = newPlaceForm['place-name'].value;
-//   dataFromAddForm.link = newPlaceForm['link'].value;
-//   const newUserCard = createCard(dataFromAddForm, { deleteCard, likeCard, handleImageClick });
-//   cardsContainer.prepend(newUserCard);
-//   newPlaceForm.reset();
-//   resetValidation(validationSettings);
-//   closePopup(popupTypeNewCard);
-// });
 
 newPlaceForm.addEventListener('submit', evt => {
   evt.preventDefault();
@@ -131,6 +138,7 @@ newPlaceForm.addEventListener('submit', evt => {
   sendMyCard(myCardName, myCardLink).then(data => {
     const newCard = createCard(data, { deleteCard, likeCard, unLikeCard, handleImageClick, myId });
     cardsContainer.prepend(newCard);
+    resetValidation(validationSettings);
     closePopup(popupTypeNewCard);
   });
 });
