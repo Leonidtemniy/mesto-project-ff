@@ -7,6 +7,7 @@ const config = {
     'Content-Type': 'application/json'
   }
 };
+export const myId = '7b0b34ea036234ba1298f535';
 
 //======GET карточек с сервера====//
 export function getInitialCards() {
@@ -103,6 +104,22 @@ export function likeCard(cardId) {
 
 export function unLikeCard(cardId) {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: 'DELETE',
+    headers: config.headers,
+    body: JSON.stringify({
+      _id: cardId
+    })
+  }).then(res => {
+    if (res.ok) {
+      return res.json();
+    } else {
+      return Promise.reject(`Ошибка сервера: ${res.status}`);
+    }
+  });
+}
+//========Удаление карточки Delete=======//
+export function deleteCard(cardId) {
+  return fetch(`${config.baseUrl}/cards/${cardId}`, {
     method: 'DELETE',
     headers: config.headers,
     body: JSON.stringify({

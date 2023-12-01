@@ -5,17 +5,19 @@ import './scripts/card.js';
 import './scripts/validation.js';
 import './scripts/api.js';
 
-import { createCard, deleteCard } from './scripts/card.js';
+import { createCard } from './scripts/card.js';
 import { openPopup, closePopup, handleImageClick } from './scripts/modal.js';
 import { enableValidation, resetValidation } from './scripts/validation.js';
 import {
+  myId,
   getInitialCards,
   getUserInfo,
   editProfileInfo,
   editProfileAvatar,
   sendMyCard,
   likeCard,
-  unLikeCard
+  unLikeCard,
+  deleteCard
 } from './scripts/api.js';
 
 const validationSettings = {
@@ -45,8 +47,15 @@ const profileImage = document.querySelector('.profile__image');
 
 getInitialCards()
   .then(data => {
+    console.log(data);
     data.forEach(card => {
-      const newCard = createCard(card, { deleteCard, likeCard, unLikeCard, handleImageClick });
+      const newCard = createCard(card, {
+        deleteCard,
+        likeCard,
+        unLikeCard,
+        handleImageClick,
+        myId
+      });
       cardsContainer.append(newCard);
       console.log(card);
     });
@@ -120,7 +129,7 @@ newPlaceForm.addEventListener('submit', evt => {
   const myCardLink = newPlaceForm['link'].value;
 
   sendMyCard(myCardName, myCardLink).then(data => {
-    const newCard = createCard(data, { deleteCard, likeCard, handleImageClick });
+    const newCard = createCard(data, { deleteCard, likeCard, unLikeCard, handleImageClick, myId });
     cardsContainer.prepend(newCard);
     closePopup(popupTypeNewCard);
   });
