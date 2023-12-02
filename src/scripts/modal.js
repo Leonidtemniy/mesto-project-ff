@@ -1,15 +1,12 @@
 //=================Функции реализации открытия/закрытия попапов=========//
-const popupTypeImage = document.querySelector('.popup_type_image');
-const bigImg = popupTypeImage.querySelector('.popup__image');
-const popupCaption = popupTypeImage.querySelector('.popup__caption');
 
 export function openPopup(popUpSelector) {
   popUpSelector.classList.add('popup_is-animated', 'popup_is-opened');
-  setCloseEventListener();
+  setCloseEventListeners();
 }
 export function closePopup(popUpSelector) {
   popUpSelector.classList.remove('popup_is-opened', 'popup_is-animated');
-  removeCloseEventListener();
+  removeCloseEventListeners();
 }
 
 function closeByEsc(evt) {
@@ -23,28 +20,11 @@ function closeByOverlayClick(evt) {
     closePopup(evt.target);
   }
 }
-function setCloseEventListener() {
+function setCloseEventListeners() {
   document.addEventListener('keydown', closeByEsc);
   document.addEventListener('click', closeByOverlayClick);
 }
-function removeCloseEventListener() {
+function removeCloseEventListeners() {
   document.removeEventListener('keydown', closeByEsc);
   document.removeEventListener('click', closeByOverlayClick);
-}
-
-//
-export function handleImageClick(newCardImage) {
-  openPopup(popupTypeImage);
-  bigImg.src = newCardImage.src;
-  bigImg.alt = newCardImage.alt;
-  popupCaption.textContent = bigImg.alt.replace('Фотография', '');
-}
-//=========Изменение надписи на кнопки сабмита======//
-export function duringLoadingText(form) {
-  const submitBtn = form.querySelector('.popup__button');
-  submitBtn.textContent = 'Сохранение...';
-}
-export function afterLoadingText(form) {
-  const submitBtn = form.querySelector('.popup__button');
-  submitBtn.textContent = 'Сохранить';
 }

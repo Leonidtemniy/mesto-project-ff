@@ -46,7 +46,7 @@ function checkInputValidity(input, formElement, config) {
     : showError(input, errorElement, config);
 }
 
-function setEventListener(formElement, config) {
+function setEventListeners(formElement, config) {
   const buttonElement = formElement.querySelector(config.submitButtonSelector);
   const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
   inputList.forEach(input => {
@@ -60,15 +60,19 @@ function setEventListener(formElement, config) {
 function enableValidation(config) {
   const forms = Array.from(document.querySelectorAll(config.formSelector));
   forms.forEach(formElement => {
-    setEventListener(formElement, config);
+    setEventListeners(formElement, config);
   });
 }
-function resetValidation(config) {
-  const forms = Array.from(document.querySelectorAll(config.formSelector));
-  forms.forEach(formElement => {
-    const buttonElement = formElement.querySelector(config.submitButtonSelector);
-    formElement.reset();
-    disableButton(buttonElement, config);
+
+function clearValidation(popupForm, config) {
+  const form = popupForm.querySelector(config.formSelector);
+  form.reset();
+  const inputList = Array.from(form.querySelectorAll(config.inputSelector));
+  inputList.forEach(input => {
+    const spanIdSelector = `#${input.name}--error`;
+    const errorElement = form.querySelector(spanIdSelector);
+    hideError(input, errorElement, config);
   });
 }
-export { enableValidation, resetValidation };
+
+export { enableValidation, clearValidation };

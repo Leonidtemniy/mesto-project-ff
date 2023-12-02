@@ -6,4 +6,6 @@
   line-height: 15px;
   text-align: left;
   color: #ff0000;
+  display: block;
+  min-height: 30px;
 }

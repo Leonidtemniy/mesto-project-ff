@@ -1,21 +1,10 @@
 ////=======Импорты, конфиги, константы======////
 import './pages/index.css';
-import './scripts/modal.js';
-import './scripts/card.js';
-import './scripts/validation.js';
-import './scripts/api.js';
 
 import { createCard } from './scripts/card.js';
+import { openPopup, closePopup } from './scripts/modal.js';
+import { enableValidation, clearValidation } from './scripts/validation.js';
 import {
-  openPopup,
-  closePopup,
-  handleImageClick,
-  duringLoadingText,
-  afterLoadingText
-} from './scripts/modal.js';
-import { enableValidation, resetValidation } from './scripts/validation.js';
-import {
-  myId,
   getInitialCards,
   getUserInfo,
   editProfileInfo,
@@ -26,6 +15,7 @@ import {
   deleteCard
 } from './scripts/api.js';
 
+//========Конфиг для валидации=========//
 const validationSettings = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
@@ -49,12 +39,24 @@ const popupTypeNewCard = document.querySelector('.popup_type_new-card');
 const popupTypeNewAvatar = document.querySelector('.popup_type_new-avatar');
 const profileImage = document.querySelector('.profile__image');
 
+const popupTypeImage = document.querySelector('.popup_type_image');
+const bigImg = popupTypeImage.querySelector('.popup__image');
+const popupCaption = popupTypeImage.querySelector('.popup__caption');
+
 //====================Отрисовка карточек на стронице c сервера=============//
 
-getInitialCards()
-  .then(data => {
-    console.log(data);
-    data.forEach(card => {
+//============Два промиса=========//
+Promise.all([getInitialCards(), getUserInfo()])
+  .then(([cardsData, userData]) => {
+    console.log(cardsData);
+    console.log(userData);
+
+    profileTitle.textContent = userData.name;
+    profileDescription.textContent = userData.about;
+    profileImage.style.backgroundImage = `url(${userData.avatar})`;
+    const myId = userData._id;
+
+    cardsData.forEach(card => {
       const newCard = createCard(card, {
         deleteCard,
         likeCard,
@@ -69,23 +71,19 @@ getInitialCards()
   .catch(err => {
     console.log(`Ошибка сервера: ${err}`);
   });
-//=========Получение данных userInfo===========//
-getUserInfo().then(data => {
-  profileTitle.textContent = data.name;
-  profileDescription.textContent = data.about;
-  profileImage.style.backgroundImage = `url(${data.avatar})`;
-});
 
 //==================Обработчики кнопок  из modal.js=================//
 profileEditBtn.addEventListener('click', () => {
-  resetValidation(validationSettings);
+  clearValidation(popupTypeEdit, validationSettings);
   openPopup(popupTypeEdit);
 });
 
 profileAddBtn.addEventListener('click', () => {
+  clearValidation(popupTypeNewCard, validationSettings);
   openPopup(popupTypeNewCard);
 });
 profileImage.addEventListener('click', () => {
+  clearValidation(popupTypeNewAvatar, validationSettings);
   openPopup(popupTypeNewAvatar);
 });
 
@@ -107,7 +105,6 @@ editProfileAvatarForm.addEventListener('submit', evt => {
     .then(data => {
       profileImage.style.backgroundImage = `url(${data.avatar})`;
       closePopup(popupTypeNewAvatar);
-      resetValidation(validationSettings);
       afterLoadingText(editProfileAvatarForm);
     })
     .catch(err => {
@@ -135,12 +132,40 @@ newPlaceForm.addEventListener('submit', evt => {
   const myCardName = newPlaceForm['place-name'].value;
   const myCardLink = newPlaceForm['link'].value;
 
-  sendMyCard(myCardName, myCardLink).then(data => {
-    const newCard = createCard(data, { deleteCard, likeCard, unLikeCard, handleImageClick, myId });
-    cardsContainer.prepend(newCard);
-    resetValidation(validationSettings);
-    closePopup(popupTypeNewCard);
-  });
+  sendMyCard(myCardName, myCardLink)
+    .then(data => {
+      const myId = data.owner._id;
+      const newCard = createCard(data, {
+        deleteCard,
+        likeCard,
+        unLikeCard,
+        handleImageClick,
+        myId
+      });
+      cardsContainer.prepend(newCard);
+      closePopup(popupTypeNewCard);
+    })
+    .catch(err => {
+      console.log(`Ошибка сервера: ${err}`);
+    });
 });
 
+//=============Открытие картинки карточки на весь экран=====///
+function handleImageClick(newCardImage) {
+  openPopup(popupTypeImage);
+  bigImg.src = newCardImage.src;
+  bigImg.alt = newCardImage.alt;
+  popupCaption.textContent = bigImg.alt.replace('Фотография', '');
+}
+
+//=========Изменение надписи на кнопки сабмита======//
+function duringLoadingText(form) {
+  const submitBtn = form.querySelector('.popup__button');
+  submitBtn.textContent = 'Сохранение...';
+}
+function afterLoadingText(form) {
+  const submitBtn = form.querySelector('.popup__button');
+  submitBtn.textContent = 'Сохранить';
+}
+//=========Запуск Валидации=======//
 enableValidation(validationSettings);

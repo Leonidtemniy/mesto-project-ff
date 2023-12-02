@@ -7,6 +7,7 @@ function createCard(data, { deleteCard, likeCard, unLikeCard, handleImageClick, 
   const likeBtn = newCardEl.querySelector('.card__like-button');
   const deleteBtn = newCardEl.querySelector('.card__delete-button');
   const likeCounter = newCardEl.querySelector('.card__likecount');
+  const cardId = data._id;
 
   newCardTitle.textContent = data.name;
   newCardImage.src = data.link;
@@ -16,30 +17,25 @@ function createCard(data, { deleteCard, likeCard, unLikeCard, handleImageClick, 
   // ===========   проверка есть ли мой лайк на карточке==============//
   if (data.likes.some(like => like._id === myId)) {
     likeBtn.classList.add('card__like-button_is-active');
-  } else {
-    likeBtn.classList.remove('card__like-button_is-active');
   }
   //============= проверка моя ли карточка если да то оставляем урну======//
   if (data.owner._id === myId) {
-    //====ничего==//;
+    deleteBtn.addEventListener('click', () => {
+      deleteCard(cardId)
+        .then(data => {
+          newCardEl.remove();
+          console.log(`Удаление успешно${data}`);
+        })
+        .catch(err => {
+          console.log(`Ошибка${err}`);
+        });
+    });
   } else {
-    deleteBtn.parentElement.removeChild(deleteBtn);
+    deleteBtn.remove();
   }
   //=========Реализация обработчиков, функции передаються вторым параметром(объетом)=======//
-  deleteBtn.addEventListener('click', () => {
-    const cardId = data._id;
-    deleteCard(cardId)
-      .then(data => {
-        newCardEl.parentElement.removeChild(newCardEl);
-        console.log(`Удаление успешно${data}`);
-      })
-      .catch(err => {
-        console.log(`Ошибка${err}`);
-      });
-  });
 
   likeBtn.addEventListener('click', () => {
-    const cardId = data._id;
     if (likeBtn.classList.contains('card__like-button_is-active')) {
       unLikeCard(cardId)
         .then(updData => {

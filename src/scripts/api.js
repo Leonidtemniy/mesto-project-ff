@@ -7,32 +7,27 @@ const config = {
     'Content-Type': 'application/json'
   }
 };
-export const myId = '7b0b34ea036234ba1298f535';
+
+function renderFetch(res) {
+  if (res.ok) {
+    return res.json();
+  } else {
+    return Promise.reject(`Ошибка сервера: ${res.status}`);
+  }
+}
 
 //======GET карточек с сервера====//
 export function getInitialCards() {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers
-  }).then(res => {
-    if (res.ok) {
-      return res.json();
-    } else {
-      return Promise.reject(`Ошибка сервера: ${res.status}`);
-    }
-  });
+  }).then(res => renderFetch(res));
 }
 
 //======GET о юзере с сервера====//
 export function getUserInfo() {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers
-  }).then(res => {
-    if (res.ok) {
-      return res.json();
-    } else {
-      return Promise.reject(`Ошибка сервера: ${res.status}`);
-    }
-  });
+  }).then(res => renderFetch(res));
 }
 //========Отправка своей карточки на сервер POST=========//
 export function sendMyCard(myCardTitle, myCardUrl) {
@@ -43,13 +38,7 @@ export function sendMyCard(myCardTitle, myCardUrl) {
       name: myCardTitle,
       link: myCardUrl
     })
-  }).then(res => {
-    if (res.ok) {
-      return res.json();
-    } else {
-      return Promise.reject(`Ошибка сервера: ${res.status}`);
-    }
-  });
+  }).then(res => renderFetch(res));
 }
 
 //========Редактирование информации профиля PATCH====//
@@ -61,13 +50,7 @@ export function editProfileInfo(userName, userAbout) {
       name: userName,
       about: userAbout
     })
-  }).then(res => {
-    if (res.ok) {
-      return res.json();
-    } else {
-      return Promise.reject(`Ошибка сервера: ${res.status}`);
-    }
-  });
+  }).then(res => renderFetch(res));
 }
 //========Редактирование фото профиля PATCH====//
 export function editProfileAvatar(userAvatar) {
@@ -77,13 +60,7 @@ export function editProfileAvatar(userAvatar) {
     body: JSON.stringify({
       avatar: userAvatar
     })
-  }).then(res => {
-    if (res.ok) {
-      return res.json();
-    } else {
-      return Promise.reject(`Ошибка сервера: ${res.status}`);
-    }
-  });
+  }).then(res => renderFetch(res));
 }
 //=========добавление и удаление лайка PUT и DELETE========//
 export function likeCard(cardId) {
@@ -93,13 +70,7 @@ export function likeCard(cardId) {
     body: JSON.stringify({
       _id: cardId
     })
-  }).then(res => {
-    if (res.ok) {
-      return res.json();
-    } else {
-      return Promise.reject(`Ошибка сервера: ${res.status}`);
-    }
-  });
+  }).then(res => renderFetch(res));
 }
 
 export function unLikeCard(cardId) {
@@ -109,13 +80,7 @@ export function unLikeCard(cardId) {
     body: JSON.stringify({
       _id: cardId
     })
-  }).then(res => {
-    if (res.ok) {
-      return res.json();
-    } else {
-      return Promise.reject(`Ошибка сервера: ${res.status}`);
-    }
-  });
+  }).then(res => renderFetch(res));
 }
 //========Удаление карточки Delete=======//
 export function deleteCard(cardId) {
@@ -125,11 +90,5 @@ export function deleteCard(cardId) {
     body: JSON.stringify({
       _id: cardId
     })
-  }).then(res => {
-    if (res.ok) {
-      return res.json();
-    } else {
-      return Promise.reject(`Ошибка сервера: ${res.status}`);
-    }
-  });
+  }).then(res => renderFetch(res));
 }
