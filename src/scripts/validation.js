@@ -66,11 +66,13 @@ function enableValidation(config) {
 
 function clearValidation(popupForm, config) {
   const form = popupForm.querySelector(config.formSelector);
+  const buttonElement = popupForm.querySelector(config.submitButtonSelector);
   form.reset();
   const inputList = Array.from(form.querySelectorAll(config.inputSelector));
   inputList.forEach(input => {
     const spanIdSelector = `#${input.name}--error`;
     const errorElement = form.querySelector(spanIdSelector);
+    toggleButtonState(buttonElement, inputList, config);
     hideError(input, errorElement, config);
   });
 }
